@@ -1,0 +1,27 @@
+version: v2
+inputs:
+  - directory: proto
+plugins:
+  # Go structs from proto messages
+  - remote: buf.build/protocolbuffers/go
+    out: backend/gen
+    opt:
+      - paths=source_relative
+
+  # Go ConnectRPC service handlers
+  - remote: buf.build/connectrpc/go
+    out: backend/gen
+    opt:
+      - paths=source_relative
+
+  # TypeScript message types
+  - remote: buf.build/bufbuild/es
+    out: frontend/gen
+    opt:
+      - target=ts
+
+  # TypeScript ConnectRPC client
+  - remote: buf.build/connectrpc/es
+    out: frontend/gen
+    opt:
+      - target=ts
