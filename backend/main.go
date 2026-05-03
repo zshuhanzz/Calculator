@@ -12,7 +12,7 @@ import (
 	"calculatorRPC/backend/gen/calculator/calculatorconnect"
 )
 
-// CalculatorServer implements the generated CalculatorServiceHandler interface
+//CalculatorServer implements the generated CalculatorServiceHandler interface
 type CalculatorServer struct{}
 
 func (s *CalculatorServer) Calculate(
@@ -38,18 +38,18 @@ func (s *CalculatorServer) Calculate(
 		symbol = "×"
 	case "divide":
 		if b == 0 {
-			return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("cannot divide by zero"))
+			return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("cant divide by zero"))
 		}
 		result = a / b
 		symbol = "÷"
 	default:
-		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("unknown operation: %s", op))
+		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("unknown operation %s", op))
 	}
 
 	expression := fmt.Sprintf("%g %s %g = %g", a, symbol, b, result)
 
 	return connect.NewResponse(&calculator.CalculateResponse{
-		Result:     result,
+		Result: result,
 		Expression: expression,
 	}), nil
 }
@@ -59,7 +59,7 @@ func main() {
 	path, handler := calculatorconnect.NewCalculatorServiceHandler(&CalculatorServer{})
 	mux.Handle(path, handler)
 
-	// Wrap with CORS so the browser on localhost:3000 can call us
+	//wrap with CORS so the browser on localhost 3000 can call
 	corsHandler := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:3000"},
 		AllowedMethods: connectcors.AllowedMethods(),
@@ -67,6 +67,6 @@ func main() {
 		ExposedHeaders: connectcors.ExposedHeaders(),
 	})
 
-	fmt.Println("Backend running on http://localhost:8080")
+	fmt.Println("Backend: localhost:8080")
 	http.ListenAndServe(":8080", corsHandler.Handler(mux))
 }
